@@ -66,25 +66,25 @@ public:
   }
 
   void TeleopPeriodic() override {
-    if (m_stick.GetRawButtonPressed(L2)) {
+    if (m_stick.GetRawButtonPressed(L1)) {
       storageIntake();
-    }else if (m_stick.GetRawButtonReleased(L2)) {
+    }else if (m_stick.GetRawButtonReleased(L1)) {
       storageStationary();
     }
-    if (m_stick.GetRawButtonPressed(R2)) {
+    if (m_stick.GetRawButtonPressed(R1)) {
       storageOuttake();
-    }else if (m_stick.GetRawButtonReleased(R2)) {
+    }else if (m_stick.GetRawButtonReleased(R1)) {
       storageStationary();
     }
 
-    if (m_stick.GetRawButtonPressed(L1)) {
+    if (m_stick.GetRawButtonPressed(L2)) {
       rampIntake();
-    }else if (m_stick.GetRawButtonReleased(L1)) {
+    }else if (m_stick.GetRawButtonReleased(L2)) {
       rampStationary();
     }
-    if (m_stick.GetRawButtonPressed(R1)) {
+    if (m_stick.GetRawButtonPressed(R2)) {
       rampOuttake();
-    }else if (m_stick.GetRawButtonReleased(R1)) {
+    }else if (m_stick.GetRawButtonReleased(R2)) {
       rampStationary();
     }
 
