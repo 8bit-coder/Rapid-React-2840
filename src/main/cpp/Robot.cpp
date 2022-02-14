@@ -2,75 +2,97 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "Robot.h"
+#include <frc/Joystick.h>
+#include <frc/TimedRobot.h>
+#include <frc/drive/DifferentialDrive.h>
+#include <frc/motorcontrol/MotorControllerGroup.h>
+#include <frc/motorcontrol/PWMTalonSRX.h>
+#include <frc/motorcontrol/MotorController.h>
 
-#include <fmt/core.h>
+using namespace frc;
+int L1 = 4;
+int R1 = 5;
+int L2 = 6;
+int R2 = 7;
 
-#include <frc/smartdashboard/SmartDashboard.h>
+class Robot : public frc::TimedRobot {
+  PWMTalonSRX m_frontLeft{1};
+  PWMTalonSRX m_rearLeft{0};
+  MotorControllerGroup m_left{m_frontLeft, m_rearLeft};
 
-void Robot::RobotInit() {
-  m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
-  m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-}
+  PWMTalonSRX m_frontRight{2};
+  PWMTalonSRX m_rearRight{3};
+  MotorControllerGroup m_right{m_frontRight, m_rearRight};
 
-/**
- * This function is called every robot packet, no matter the mode. Use
- * this for items like diagnostics that you want ran during disabled,
- * autonomous, teleoperated and test.
- *
- * <p> This runs after the mode specific periodic functions, but before
- * LiveWindow and SmartDashboard integrated updating.
- */
-void Robot::RobotPeriodic() {}
+  DifferentialDrive m_drive{m_left, m_right};
+  DifferentialDrive m_robotDrive{m_left, m_right};
 
-/**
- * This autonomous (along with the chooser code above) shows how to select
- * between different autonomous modes using the dashboard. The sendable chooser
- * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
- * remove all of the chooser code and uncomment the GetString line to get the
- * auto name from the text box below the Gyro.
- *
- * You can add additional auto modes by adding additional comparisons to the
- * if-else structure below with additional strings. If using the SendableChooser
- * make sure to add them to the chooser code above as well.
- */
-void Robot::AutonomousInit() {
-  m_autoSelected = m_chooser.GetSelected();
-  // m_autoSelected = SmartDashboard::GetString("Auto Selector",
-  //     kAutoNameDefault);
-  fmt::print("Auto selected: {}\n", m_autoSelected);
+  PWMTalonSRX m_storageBack{4};
+  PWMTalonSRX m_storageFront{5};
+  PWMTalonSRX m_rampLeft{6};
+  PWMTalonSRX m_rampRight{7};
+  Joystick m_stick{0};
 
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
+  float turn, speed, ballStorage, ramp;
+
+  void storageIntake(){
+    m_storageBack.Set(0.5);
+    m_storageFront.Set(0.5);
   }
-}
-
-void Robot::AutonomousPeriodic() {
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
+  void storageOuttake(){
+    m_storageBack.Set(-0.8);
+    m_storageFront.Set(-0.8);
   }
-}
+  void storageStationary(){
+    m_storageBack.Set(0);
+    m_storageFront.Set(0);
+  }
+  void rampIntake(){
+    m_rampLeft.Set(0.5);
+    m_rampRight.Set(-0.5);
+  }
+  void rampOuttake(){
+    m_rampLeft.Set(1);
+    m_rampRight.Set(-1);
+  }
+  void rampStationary(){
+    m_rampLeft.Set(0);
+    m_rampRight.Set(0);
+  }
 
-void Robot::TeleopInit() {}
+public:
+  void RobotInit() override {
+    m_left.SetInverted(true);
+  }
 
-void Robot::TeleopPeriodic() {}
+  void TeleopPeriodic() override {
+    if (m_stick.GetRawButtonPressed(L2)) {
+      storageIntake();
+    }else if (m_stick.GetRawButtonReleased(L2)) {
+      storageStationary();
+    }
+    if (m_stick.GetRawButtonPressed(R2)) {
+      storageOuttake();
+    }else if (m_stick.GetRawButtonReleased(R2)) {
+      storageStationary();
+    }
 
-void Robot::DisabledInit() {}
+    if (m_stick.GetRawButtonPressed(L1)) {
+      rampIntake();
+    }else if (m_stick.GetRawButtonReleased(L1)) {
+      rampStationary();
+    }
+    if (m_stick.GetRawButtonPressed(R1)) {
+      rampOuttake();
+    }else if (m_stick.GetRawButtonReleased(R1)) {
+      rampStationary();
+    }
 
-void Robot::DisabledPeriodic() {}
-
-void Robot::TestInit() {}
-
-void Robot::TestPeriodic() {}
-
-void Robot::SimulationInit() {}
-
-void Robot::SimulationPeriodic() {}
+    speed = -m_stick.GetRawAxis(5);
+    turn = m_stick.GetRawAxis(2);
+    m_robotDrive.ArcadeDrive(speed, turn);
+  }
+};
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
