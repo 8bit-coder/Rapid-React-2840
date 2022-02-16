@@ -66,6 +66,7 @@ public:
   }
 
   void TeleopPeriodic() override {
+    /* CODE FOR THE THINGY THING
     if (m_stick.GetRawButtonPressed(L1)) {
       storageIntake();
     }else if (m_stick.GetRawButtonReleased(L1)) {
@@ -87,9 +88,9 @@ public:
     }else if (m_stick.GetRawButtonReleased(R2)) {
       rampStationary();
     }
-
-    speed = -m_stick.GetRawAxis(5);
-    turn = m_stick.GetRawAxis(2);
+    */
+    speed = (-m_stick.GetRawAxis(5))*0.5;
+    turn = m_stick.GetRawAxis(2)*0.5;
     m_robotDrive.ArcadeDrive(speed, turn);
   }
 };
