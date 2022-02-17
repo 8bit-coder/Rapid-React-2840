@@ -33,7 +33,7 @@ class Robot : public frc::TimedRobot {
   PWMTalonSRX m_rampRight{7};
   Joystick m_stick{0};
 
-  float turn, speed, ballStorage, ramp;
+  float deez, nuts, ballStorage, ramp;
 
   void storageIntake(){
     m_storageBack.Set(0.5);
@@ -89,9 +89,9 @@ public:
       rampStationary();
     }
     */
-    speed = (-m_stick.GetRawAxis(5))*0.5;
-    turn = m_stick.GetRawAxis(2)*0.5;
-    m_robotDrive.ArcadeDrive(speed, turn);
+    deez = (-m_stick.GetRawAxis(5))*0.5;
+    nuts = m_stick.GetRawAxis(2)*0.5;
+    m_robotDrive.ArcadeDrive(deez, nuts);
   }
 };
 
