@@ -24,7 +24,6 @@ class Robot : public frc::TimedRobot {
   PWMTalonSRX m_rearRight{3};
   MotorControllerGroup m_right{m_frontRight, m_rearRight};
 
-  DifferentialDrive m_drive{m_left, m_right};
   DifferentialDrive m_robotDrive{m_left, m_right};
 
   PWMTalonSRX m_storageBack{4};
@@ -89,8 +88,8 @@ public:
       rampStationary();
     }
     */
-    deez = (-m_stick.GetRawAxis(5))*0.5;
-    nuts = m_stick.GetRawAxis(2)*0.5;
+    deez = (-m_stick.GetRawAxis(5))*1;
+    nuts = m_stick.GetRawAxis(2)*1;
     m_robotDrive.ArcadeDrive(deez, nuts);
   }
 };
