@@ -38,7 +38,7 @@ class Robot : public frc::TimedRobot {
   Joystick c_ps5{0};
   Joystick c_flightStick{1};
 
-  float deez, nuts, ballStorage, ramp;
+  float deez, nuts;
 
 public:
   void RobotInit() override {
