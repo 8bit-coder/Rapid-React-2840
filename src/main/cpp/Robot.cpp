@@ -28,8 +28,8 @@ class Robot : public frc::TimedRobot {
 
   PWMTalonSRX m_storageBack{4};
   PWMTalonSRX m_storageFront{5};
-  PWMTalonSRX m_rampLeft{6};
-  PWMTalonSRX m_rampRight{7};
+  PWMTalonSRX m_intake{6};
+  PWMTalonSRX m_outtake{7};
   Joystick m_stick{0};
 
   float deez, nuts, ballStorage, ramp;
@@ -46,17 +46,17 @@ class Robot : public frc::TimedRobot {
     m_storageBack.Set(0);
     m_storageFront.Set(0);
   }
-  void rampIntake(){
-    m_rampLeft.Set(0.5);
-    m_rampRight.Set(-0.5);
+  void intake(){
+    m_intake.Set(0.5);
   }
-  void rampOuttake(){
-    m_rampLeft.Set(1);
-    m_rampRight.Set(-1);
+  void outtake(){
+    m_outtake.Set(1);
   }
-  void rampStationary(){
-    m_rampLeft.Set(0);
-    m_rampRight.Set(0);
+  void intakeStationary(){
+    m_intake.Set(0);
+  }
+  void outtakeStationary(){
+    m_outtake.Set(0);
   }
 
 public:
@@ -78,14 +78,14 @@ public:
     }
 
     if (m_stick.GetRawButtonPressed(L2)) {
-      rampIntake();
+      intake();
     }else if (m_stick.GetRawButtonReleased(L2)) {
-      rampStationary();
+      intakeStationary();
     }
     if (m_stick.GetRawButtonPressed(R2)) {
-      rampOuttake();
+      outtake();
     }else if (m_stick.GetRawButtonReleased(R2)) {
-      rampStationary();
+      outtakeStationary();
     }
     */
     deez = (-m_stick.GetRawAxis(5))*1;
