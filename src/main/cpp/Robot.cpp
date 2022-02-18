@@ -34,61 +34,41 @@ class Robot : public frc::TimedRobot {
 
   float deez, nuts, ballStorage, ramp;
 
-  void storageIntake(){
-    m_storageBack.Set(0.5);
-    m_storageFront.Set(0.5);
-  }
-  void storageOuttake(){
-    m_storageBack.Set(-0.8);
-    m_storageFront.Set(-0.8);
-  }
-  void storageStationary(){
-    m_storageBack.Set(0);
-    m_storageFront.Set(0);
-  }
-  void intake(){
-    m_intake.Set(0.5);
-  }
-  void outtake(){
-    m_outtake.Set(1);
-  }
-  void intakeStationary(){
-    m_intake.Set(0);
-  }
-  void outtakeStationary(){
-    m_outtake.Set(0);
-  }
-
 public:
   void RobotInit() override {
     m_left.SetInverted(true);
   }
 
   void TeleopPeriodic() override {
-    if (m_stick.GetRawButtonPressed(L1)) {
-      storageIntake();
-    }else if (m_stick.GetRawButtonReleased(L1)) {
-      storageStationary();
-    }
-    if (m_stick.GetRawButtonPressed(R1)) {
-      storageOuttake();
-    }else if (m_stick.GetRawButtonReleased(R1)) {
-      storageStationary();
-    }
+    checkButtons();
 
-    if (m_stick.GetRawButtonPressed(L2)) {
-      intake();
-    }else if (m_stick.GetRawButtonReleased(L2)) {
-      intakeStationary();
-    }
-    if (m_stick.GetRawButtonPressed(R2)) {
-      outtake();
-    }else if (m_stick.GetRawButtonReleased(R2)) {
-      outtakeStationary();
-    }
     deez = (-m_stick.GetRawAxis(5))*1;
     nuts = m_stick.GetRawAxis(2)*1;
     m_robotDrive.ArcadeDrive(deez, nuts);
+  }
+
+  void checkButtons(){
+    if (m_stick.GetRawButtonPressed(L1)) {
+      m_storageBack.Set(0.5);
+      m_storageFront.Set(0.5);
+    }else if (m_stick.GetRawButtonPressed(R1)) {
+      m_storageBack.Set(-0.5);
+      m_storageFront.Set(-0.5);
+    }else{
+      m_storageBack.Set(0);
+      m_storageFront.Set(0);
+    }
+
+    if (m_stick.GetRawButtonPressed(L2)) {
+      m_intake.Set(0.5);
+    }else{
+      m_intake.Set(0);
+    }
+    if (m_stick.GetRawButtonPressed(R2)) {
+      m_outtake.Set(1);
+    }else{
+      m_outtake.Set(0);
+    }
   }
 };
 
