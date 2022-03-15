@@ -11,14 +11,10 @@
 #include <frc/Servo.h>
 
 using namespace frc;
-int L1 = 4;
-int R1 = 5;
-int L2 = 6;
-int R2 = 7;
 
 class Robot : public frc::TimedRobot {
-  PWMTalonSRX m_frontLeft{1};
-  PWMTalonSRX m_rearLeft{0};
+  PWMTalonSRX m_frontLeft{0};
+  PWMTalonSRX m_rearLeft{1};
   MotorControllerGroup m_left{m_frontLeft, m_rearLeft};
 
   PWMTalonSRX m_frontRight{2};
@@ -32,11 +28,7 @@ class Robot : public frc::TimedRobot {
   PWMTalonSRX m_intake{6};
   PWMTalonSRX m_outtake{7};
 
-  Servo cameraX{8};
-  Servo cameraY{9};
-
   Joystick c_ps5{0};
-  Joystick c_flightStick{1};
 
   float deez, nuts;
 
@@ -47,7 +39,6 @@ public:
 
   void TeleopPeriodic() override {
     checkButtons();
-    cameraControls();
 
     deez = (-c_ps5.GetRawAxis(5))*1;
     nuts = c_ps5.GetRawAxis(2)*1;
@@ -55,10 +46,7 @@ public:
   }
 
   void checkButtons(){
-    if (c_ps5.GetRawButtonPressed(L1)) {
-      m_storageBack.Set(0.5);
-      m_storageFront.Set(0.5);
-    }else if (c_ps5.GetRawButtonPressed(R1)) {
+    if (c_ps5.GetRawButton(5) || c_ps5.GetRawButton(6)) {
       m_storageBack.Set(-0.5);
       m_storageFront.Set(-0.5);
     }else{
@@ -66,21 +54,16 @@ public:
       m_storageFront.Set(0);
     }
 
-    if (c_ps5.GetRawButtonPressed(L2)) {
+    if (c_ps5.GetRawButton(7)) {
       m_intake.Set(0.5);
     }else{
       m_intake.Set(0);
     }
-    if (c_ps5.GetRawButtonPressed(R2)) {
-      m_outtake.Set(1);
+    if (c_ps5.GetRawButton(8)) {
+      m_outtake.Set(-1);
     }else{
       m_outtake.Set(0);
     }
-  }
-
-  void cameraControls(){
-    cameraX.Set(c_flightStick.GetRawAxis(0));
-    cameraY.Set(-c_flightStick.GetRawAxis(1));
   }
 };
 
