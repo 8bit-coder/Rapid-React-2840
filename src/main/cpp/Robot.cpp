@@ -9,6 +9,8 @@
 #include <frc/motorcontrol/PWMTalonSRX.h>
 #include <frc/motorcontrol/MotorController.h>
 #include <frc/Servo.h>
+#include <stdio.h>
+#include <iostream>
 
 using namespace frc;
 
@@ -46,20 +48,23 @@ public:
   }
 
   void checkButtons(){
-    if (c_ps5.GetRawButton(5) || c_ps5.GetRawButton(6)) {
-      m_storageBack.Set(-0.5);
-      m_storageFront.Set(-0.5);
+    if(c_ps5.GetRawButton(5)){
+      m_storageBack.Set(-0.25);
+      m_storageFront.Set(-0.25);
+    }else if(c_ps5.GetRawButton(6)){
+      m_storageBack.Set(0.25);
+      m_storageFront.Set(0.25);
     }else{
       m_storageBack.Set(0);
       m_storageFront.Set(0);
     }
 
-    if (c_ps5.GetRawButton(7)) {
-      m_intake.Set(0.5);
+    if (c_ps5.GetRawButton(7)){
+      m_intake.Set((c_ps5.GetRawAxis(3)+1)/4);
     }else{
       m_intake.Set(0);
     }
-    if (c_ps5.GetRawButton(8)) {
+    if (c_ps5.GetRawButton(8)){
       m_outtake.Set(-1);
     }else{
       m_outtake.Set(0);
